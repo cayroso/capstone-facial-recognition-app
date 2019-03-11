@@ -1,4 +1,6 @@
 ﻿<Window xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
+        xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -16,7 +18,80 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
-    <Grid>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="CommonCommandBinding_CanExecute" />
+        <CommandBinding Command="Open" CanExecute="CommonCommandBinding_CanExecute" />
+        <CommandBinding Command="Save" CanExecute="CommonCommandBinding_CanExecute" />
+    </Window.CommandBindings>
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Command="Cut" ToolTip="Cut selection to Windows Clipboard.">
+                    <!--<Image Source="/WpfTutorialSamples;component/Images/cut.png" />-->
+                    <TextBlock Name="Plate" Margin="3,0,0,0">Enter</TextBlock>
+                </Button>
+                <Button Command="Copy" ToolTip="Copy selection to Windows Clipboard.">
+                    <!--<Image Source="/WpfTutorialSamples;component/Images/copy.png" />-->
+                    <TextBlock Margin="3,0,0,0">Exit</TextBlock>
+                </Button>
+                <!--<Button Command="Paste" ToolTip="Paste from Windows Clipboard.">
+                    <StackPanel Orientation="Horizontal">
+                        -->
+                <!--<Image Source="/WpfTutorialSamples;component/Images/paste.png" />-->
+                <!--
+                        <TextBlock Margin="3,0,0,0">Paste3</TextBlock>
+                    </StackPanel>
+                </Button>-->
+            </ToolBar>
+        </ToolBarTray>
+        <Grid ShowGridLines="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Background="Gray" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Border Background="Red" Grid.Row="0">
+                    <WindowsFormsHost>
+                        <emgu:ImageBox  x:Name="ImageFace"></emgu:ImageBox>
+                    </WindowsFormsHost>
+                </Border>
+                <Border Background="Blue"  Grid.Row="1">
+                    <WindowsFormsHost>
+                        <emgu:ImageBox x:Name="ImagePlate"></emgu:ImageBox>
+                    </WindowsFormsHost>
+                </Border>
+            </Grid>
+            <!--<TextBlock Text="Rowspan=2 Colspan=2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"></TextBlock>-->
+            <ListView BorderBrush="Beige" Background="Blue" Grid.Column="1" Name="ListView1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <!--<ListViewItem Content="Coffie"></ListViewItem>
+            <ListViewItem Content="Tea"></ListViewItem>
+            <ListViewItem Content="Orange Juice"></ListViewItem>
+            <ListViewItem Content="Milk"></ListViewItem>
+            <ListViewItem Content="Iced Tea"></ListViewItem>
+            <ListViewItem Content="Mango Shake"></ListViewItem>-->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="PlateNumber"   DisplayMemberBinding="{Binding PlateNumber}" />
+                        <GridViewColumn Header="DateEntry"  DisplayMemberBinding="{Binding DateEntry}" />
+                        <GridViewColumn Header="DateExit"  DisplayMemberBinding="{Binding DateExit}" />
+                        <GridViewColumn Header="TotalHours"  DisplayMemberBinding="{Binding TotalHours}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </DockPanel>
+
+    <!--<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -37,5 +112,5 @@
         </StackPanel>
         
         
-    </Grid>
+    </Grid>-->
 </Window>
