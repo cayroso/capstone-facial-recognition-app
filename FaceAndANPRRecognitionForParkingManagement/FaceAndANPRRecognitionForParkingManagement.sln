@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "face.anpr.winform", "face.a
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "face.anpr.wpf", "face.anpr.wpf\face.anpr.wpf.csproj", "{5333F40E-65D5-4ACF-BEE6-850B58FE7D3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "parking.system.winform", "parking.system.winform\parking.system.winform.csproj", "{90B4802F-1F34-467F-8105-64B02367E534}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5333F40E-65D5-4ACF-BEE6-850B58FE7D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5333F40E-65D5-4ACF-BEE6-850B58FE7D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5333F40E-65D5-4ACF-BEE6-850B58FE7D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B4802F-1F34-467F-8105-64B02367E534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B4802F-1F34-467F-8105-64B02367E534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B4802F-1F34-467F-8105-64B02367E534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B4802F-1F34-467F-8105-64B02367E534}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
