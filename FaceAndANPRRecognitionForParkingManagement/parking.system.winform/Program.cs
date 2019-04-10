@@ -25,106 +25,40 @@ namespace parking.system.winform
 
             var db = new AppDbContext();
 
-            //  check if we need to prepopulate
-            if (!db.Registrations.Any())
-            {
-                var reg = new Registration
-                {
-                    RegistrationId = "administrator",
-                    Fullname = "Administrator"
-                };
+            const string sql = @"
+create table if not exists Parking(
+    ParkingId varchar(32) not null
+    , PlateNumber varchar(32) not null
 
-                var images = new[] {
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887433428456675.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887434176482201.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887434219632288.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887434244201391.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887434455409323.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887438299117359.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887438438272244.bmp",
-                    },
-                    new RegistrationImage
-                    {
-                        RegistrationImageId = Guid.NewGuid().ToString(),
-                        RegistrationImageType = EnumRegistrationImageType.Face,
-                        RegistrationId = reg.RegistrationId,
-                        Filename = "face_administrator_636887438488228500.bmp",
-                    }
-                };
+    , DateStart datetime not null
+    , DateEnd datetime null
+);
 
-                var parking = new[]
-                {
-                    new Parking
-                    {
-                        ParkingId = Guid.NewGuid().ToString(),
-                        RegistrationId = reg.RegistrationId, PlateNumber= "1234", DateStart= DateTime.UtcNow, DateEnd = DateTime.UtcNow.AddHours(3)
-                    },
-                    new Parking
-                    {
-                        ParkingId = Guid.NewGuid().ToString(),
-                        RegistrationId = reg.RegistrationId, PlateNumber= "222", DateStart= DateTime.UtcNow.AddHours(4), DateEnd = DateTime.UtcNow.AddHours(5)
-                    }
-                };
+create table if not exists ParkingFaceImage(
+    ParkingFaceImageId varchar(32) not null
+    , ParkingId varchar(32) not null
+    , Filename varchar(500) not null
+);
 
-                db.Registrations.Add(reg);
-                db.RegistrationImages.AddRange(images);
-                db.Parkings.AddRange(parking);
+create table if not exists ParkingPlateImage(
+    ParkingPlateImageId varchar(32) not null
+    , ParkingId varchar(32) not null
+    , Filename varchar(500) not null
+);
+";
+            
+            db.Database.ExecuteSqlCommand(sql);
 
-                db.SaveChanges();
+            //  SEED DATA
+            //AppDbInitializer.Initialize(db);
 
-            }
-            //db.Database.
-            //if (db.Database.CreateIfNotExists())
-            //{
-            //    db.Database.Initialize(true);
-            //}
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new frmEntry());
 
-            Application.Run(new frmMain());
             //Application.Run(new frmEntry());
+            Application.Run(new frmMain());
+            //Application.Run(new frmExit());
 
             //Run();
         }

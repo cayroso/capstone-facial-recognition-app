@@ -461,9 +461,9 @@ namespace parking.system.winform
 
             //_capture.Pause();
 
-            var frm = new frmRegister();
+            //var frm = new frmRegister();
 
-            frm.ShowDialog();
+            //frm.ShowDialog();
 
             _capturePause = false;
             _capture = new VideoCapture();
