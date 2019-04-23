@@ -32,10 +32,6 @@
             this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.btnApproveEntry = new System.Windows.Forms.Button();
             this.imageBox2 = new Emgu.CV.UI.ImageBox();
-            this.cmbCamera1 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbCamera2 = new System.Windows.Forms.ComboBox();
             this.btnCaptureFace = new System.Windows.Forms.Button();
             this.imgBox1 = new Emgu.CV.UI.ImageBox();
             this.imgBox2 = new Emgu.CV.UI.ImageBox();
@@ -62,7 +58,7 @@
             // 
             this.imageBox1.BackColor = System.Drawing.SystemColors.Highlight;
             this.imageBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imageBox1.Location = new System.Drawing.Point(12, 7);
+            this.imageBox1.Location = new System.Drawing.Point(12, 5);
             this.imageBox1.Name = "imageBox1";
             this.imageBox1.Size = new System.Drawing.Size(400, 315);
             this.imageBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -71,9 +67,9 @@
             // 
             // btnApproveEntry
             // 
-            this.btnApproveEntry.Location = new System.Drawing.Point(528, 373);
+            this.btnApproveEntry.Location = new System.Drawing.Point(632, 606);
             this.btnApproveEntry.Name = "btnApproveEntry";
-            this.btnApproveEntry.Size = new System.Drawing.Size(208, 37);
+            this.btnApproveEntry.Size = new System.Drawing.Size(100, 37);
             this.btnApproveEntry.TabIndex = 5;
             this.btnApproveEntry.Text = "Approve Entry";
             this.btnApproveEntry.UseVisualStyleBackColor = true;
@@ -83,52 +79,17 @@
             // 
             this.imageBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.imageBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imageBox2.Location = new System.Drawing.Point(632, 5);
+            this.imageBox2.Location = new System.Drawing.Point(12, 328);
             this.imageBox2.Name = "imageBox2";
             this.imageBox2.Size = new System.Drawing.Size(400, 315);
             this.imageBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.imageBox2.TabIndex = 7;
             this.imageBox2.TabStop = false;
-            this.imageBox2.Click += new System.EventHandler(this.imageBox2_Click);
-            // 
-            // cmbCamera1
-            // 
-            this.cmbCamera1.FormattingEnabled = true;
-            this.cmbCamera1.Location = new System.Drawing.Point(91, 326);
-            this.cmbCamera1.Name = "cmbCamera1";
-            this.cmbCamera1.Size = new System.Drawing.Size(321, 21);
-            this.cmbCamera1.TabIndex = 9;
-            this.cmbCamera1.SelectedIndexChanged += new System.EventHandler(this.cmbCamera1_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 329);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Face Camera";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(632, 329);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(110, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Plate Number Camera";
-            // 
-            // cmbCamera2
-            // 
-            this.cmbCamera2.FormattingEnabled = true;
-            this.cmbCamera2.Location = new System.Drawing.Point(750, 326);
-            this.cmbCamera2.Name = "cmbCamera2";
-            this.cmbCamera2.Size = new System.Drawing.Size(191, 21);
-            this.cmbCamera2.TabIndex = 12;
+            
             // 
             // btnCaptureFace
             // 
-            this.btnCaptureFace.Location = new System.Drawing.Point(418, 326);
+            this.btnCaptureFace.Location = new System.Drawing.Point(632, 5);
             this.btnCaptureFace.Name = "btnCaptureFace";
             this.btnCaptureFace.Size = new System.Drawing.Size(100, 33);
             this.btnCaptureFace.TabIndex = 15;
@@ -204,16 +165,17 @@
             // 
             // txtPlate
             // 
-            this.txtPlate.Location = new System.Drawing.Point(1038, 326);
+            this.txtPlate.Location = new System.Drawing.Point(418, 623);
             this.txtPlate.Name = "txtPlate";
-            this.txtPlate.Size = new System.Drawing.Size(221, 20);
+            this.txtPlate.Size = new System.Drawing.Size(208, 20);
             this.txtPlate.TabIndex = 22;
+            
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(947, 326);
+            this.button1.Location = new System.Drawing.Point(632, 328);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(85, 33);
+            this.button1.Size = new System.Drawing.Size(100, 33);
             this.button1.TabIndex = 23;
             this.button1.Text = "Clear";
             this.button1.UseVisualStyleBackColor = true;
@@ -225,9 +187,9 @@
             this.columnHeader1,
             this.columnHeader2});
             this.lvwPlates.FullRowSelect = true;
-            this.lvwPlates.Location = new System.Drawing.Point(1038, 5);
+            this.lvwPlates.Location = new System.Drawing.Point(418, 328);
             this.lvwPlates.Name = "lvwPlates";
-            this.lvwPlates.Size = new System.Drawing.Size(221, 315);
+            this.lvwPlates.Size = new System.Drawing.Size(208, 289);
             this.lvwPlates.TabIndex = 24;
             this.lvwPlates.UseCompatibleStateImageBehavior = false;
             this.lvwPlates.View = System.Windows.Forms.View.Details;
@@ -245,7 +207,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1265, 418);
+            this.ClientSize = new System.Drawing.Size(738, 649);
             this.Controls.Add(this.lvwPlates);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtPlate);
@@ -256,10 +218,6 @@
             this.Controls.Add(this.imgBox2);
             this.Controls.Add(this.imgBox1);
             this.Controls.Add(this.btnCaptureFace);
-            this.Controls.Add(this.cmbCamera2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cmbCamera1);
             this.Controls.Add(this.imageBox2);
             this.Controls.Add(this.btnApproveEntry);
             this.Controls.Add(this.imageBox1);
@@ -267,6 +225,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Enter Parking";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmEntry_FormClosed);
+            this.Load += new System.EventHandler(this.frmEntry_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBox1)).EndInit();
@@ -285,10 +244,6 @@
         private Emgu.CV.UI.ImageBox imageBox1;
         private System.Windows.Forms.Button btnApproveEntry;
         private Emgu.CV.UI.ImageBox imageBox2;
-        private System.Windows.Forms.ComboBox cmbCamera1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmbCamera2;
         private System.Windows.Forms.Button btnCaptureFace;
         private Emgu.CV.UI.ImageBox imgBox1;
         private Emgu.CV.UI.ImageBox imgBox2;

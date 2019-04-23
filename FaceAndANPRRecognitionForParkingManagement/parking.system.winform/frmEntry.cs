@@ -8,6 +8,7 @@ using parking.system.winform.data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,11 +22,10 @@ namespace parking.system.winform
 {
     public partial class frmEntry : Form
     {
-        private LicensePlateDetector _licensePlateDetector = new LicensePlateDetector(@"C:\Users\ChristopherAyroso\Source\Repos\capstone-facial-recognition-app\FaceAndANPRRecognitionForParkingManagement\parking.system.winform\ocr\tessdata");
+        //private LicensePlateDetector _licensePlateDetector = new LicensePlateDetector(@"C:\Users\ChristopherAyroso\Source\Repos\capstone-facial-recognition-app\FaceAndANPRRecognitionForParkingManagement\parking.system.winform\ocr\tessdata");
+        private LicensePlateDetector _licensePlateDetector = new LicensePlateDetector(@"ocr\tessdata");
         private VideoCapture _captureFace = null;
         private VideoCapture _capturePlate = null;
-
-        bool _capturePause = false;
 
         Image<Bgr, byte> _faceCopy;
 
@@ -37,75 +37,30 @@ namespace parking.system.winform
 
         List<ImageBox> _faceImages = new List<ImageBox>();
 
+        bool _getFace = true;
+
+        Timer _timer = new Timer();
+
         public frmEntry()
         {
-
-
             InitializeComponent();
-            TrainEigenFaceRecognizer();
+        }
+
+
+        private void frmEntry_Load(object sender, EventArgs e)
+        {
+
+            //TrainEigenFaceRecognizer();
 
             _faceImages = new List<ImageBox>
             {
                 imgBox1, imgBox2, imgBox3, imgBox4,imgBox5, imgBox6
             };
 
-
-            Application.Idle += new EventHandler(delegate (object sender, EventArgs e)
-            {  //run this until application closed (close button click on image viewer)
-               //this.imageBox1.Image = _capture.QueryFrame(); //draw the image obtained from camera
-               //if (!_capturePause && _capture != null)
-               //    ProcessFaceFrame(null, null);
-
-                //if (!_capturePause && _capture2 != null)
-                //    ProcessPlateFrame(null, null);
-
-
-                StreamFaceFrame();
-                StreamPlateFrame();
-
-            });
-
-            DsDevice[] _SystemCamereas = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
-
-            var devices = new List<KeyValuePair<int, string>>();
-            var devIndex = 0;
-
-            foreach (var cam in _SystemCamereas)
-            {
-                devices.Add(new KeyValuePair<int, string>(devIndex++, cam.Name));
-            }
-
-            if (devices.Count > 0)
-            {
-                cmbCamera1.Items.Clear();
-                cmbCamera1.DataSource = new BindingSource(devices, null);
-                cmbCamera1.DisplayMember = "Value";
-                cmbCamera1.ValueMember = "Key";
-
-                cmbCamera1.SelectedIndex = 0;
-            }
-
-            if (devices.Count > 1)
-            {
-                cmbCamera2.Items.Clear();
-                cmbCamera2.DataSource = new BindingSource(devices, null);
-                cmbCamera2.DisplayMember = "Value";
-                cmbCamera2.ValueMember = "Key";
-
-                cmbCamera2.SelectedIndex = 1;
-
-                //_capture2 = new VideoCapture(1);
-
-            }
-            else
-            {
-                //  TODO
-                //MessageBox.Show("Only 1 camera was detected", "Missing Required Cameras", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
+            _faceImages.ForEach(p => p.DoubleClick += imgBox_DoubleClick);
+            
             CameraCaptures();
         }
-
 
         void TrainEigenFaceRecognizer()
         {
@@ -163,13 +118,15 @@ namespace parking.system.winform
         {
             try
             {
-                _captureFace = new VideoCapture(cmbCamera1.SelectedIndex);
-                if (cmbCamera2.Items.Count > 0)
-                {
-                    _capturePlate = new VideoCapture(cmbCamera2.SelectedIndex);
-                }
-                //_capture.ImageGrabbed += ProcessFrame2;
+                var camera1 =int.Parse(ConfigurationManager.AppSettings["camera1"]);
+                _captureFace = new VideoCapture(camera1);
+                _captureFace.ImageGrabbed += _captureFace_ImageGrabbed;
+                _captureFace.Start();
 
+                var camera2 = int.Parse(ConfigurationManager.AppSettings["camera2"]);
+                _capturePlate = new VideoCapture(camera2);
+                _capturePlate.ImageGrabbed += _capturePlate_ImageGrabbed;
+                _capturePlate.Start();
             }
             catch (NullReferenceException excpt)
             {
@@ -177,257 +134,116 @@ namespace parking.system.winform
             }
         }
 
-        void StreamFaceFrame()
+        private void _capturePlate_ImageGrabbed(object sender, EventArgs e)
         {
-            if (_captureFace == null)
+            if (_capturePlate == null || !_capturePlate.IsOpened)
                 return;
 
-            if (!_captureFace.IsOpened || _capturePause)
-            {
-                return;
-            }
+            Mat queryFrame = new Mat();
 
-            var queryFrame = _captureFace.QueryFrame();
+            _capturePlate.Read(queryFrame);
 
             if (queryFrame == null)
             {
                 return;
             }
 
-            var image = queryFrame.ToImage<Bgr, byte>().Resize(400, 300, Emgu.CV.CvEnum.Inter.Cubic);
-
-            var imageClone = image.Clone();
-            imageBox1.Image = imageClone;
-
-            List<Rectangle> faces = new List<Rectangle>();
-            List<Rectangle> eyes = new List<Rectangle>();
-            long detectionTime;
-            DetectFace.Detect(imageClone, @"haarcascades\haarcascade_frontalface_default.xml", @"haarcascades\haarcascade_eye.xml", faces, eyes, out detectionTime);
-
-            foreach (Rectangle face in faces)
+            try
             {
-                CvInvoke.cvResetImageROI(image);
+                var image = queryFrame.ToImage<Bgr, byte>().Resize(400, 300, Emgu.CV.CvEnum.Inter.Cubic);
 
-                image.Draw(face, new Bgr(Color.Red), 2);
-            }
-
-            foreach (Rectangle eye in eyes)
-            {
-                CvInvoke.cvResetImageROI(image);
-                image.Draw(eye, new Bgr(Color.Blue), 2);
-            }
-
-            if (faces.Any() && eyes.Count == 2)
-            {
-                //image.ROI = faces.First();
-                imageBox1.Image = image;
-
-                imageClone.ROI = faces.First();
-                _faceCopy = imageClone.Copy().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
-
-            }
-
-            btnCaptureFace.Enabled = _faceCopy != null;
-
-        }
-
-        void StreamPlateFrame()
-        {
-            if (_capturePlate == null)
-                return;
-
-            if (!_capturePlate.IsOpened || _capturePause)
-            {
-                return;
-            }
-
-            var queryFrame = _capturePlate.QueryFrame();
-
-            if (queryFrame == null)
-            {
-                return;
-            }
-
-            var image = queryFrame.ToImage<Bgr, byte>().Resize(400, 300, Emgu.CV.CvEnum.Inter.Cubic);
-
-
-            if (lvwPlates.Items.Count <= 0)
-            {
-                var apnr = new openalprnet.AlprNet("au", "", "");
-                apnr.TopN = 5;
-                var loaded = apnr.IsLoaded();
-                var bitmap = image.ToBitmap();
-                var result = apnr.Recognize(bitmap);
-
-                if (result.Plates.Any())
+                if (lvwPlates.Items.Count <= 0)
                 {
-                    var firstPlate = result.Plates.First();
-                    
-                    lvwPlates.Items.Clear();
+                    var apnr = new openalprnet.AlprNet("au", "", "");
+                    apnr.TopN = 5;
+                    var loaded = apnr.IsLoaded();
+                    var bitmap = image.ToBitmap();
+                    var result = apnr.Recognize(bitmap);
 
-                    foreach (var item in firstPlate.TopNPlates)
+                    if (result.Plates.Any())
                     {
-                        var str = $"{item.Characters} - {item.OverallConfidence.ToString("N2")}%";
+                        var firstPlate = result.Plates.First();
 
-                        var lvwItem = new ListViewItem
+                        lvwPlates.Items.Clear();
+
+                        foreach (var item in firstPlate.TopNPlates)
                         {
-                            Text = item.Characters
-                        };
+                            var str = $"{item.Characters} - {item.OverallConfidence.ToString("N2")}%";
 
-                        lvwItem.SubItems.Add(item.OverallConfidence.ToString("N2"));
+                            var lvwItem = new ListViewItem
+                            {
+                                Text = item.Characters
+                            };
 
-                        lvwPlates.Items.Add(lvwItem);
+                            lvwItem.SubItems.Add(item.OverallConfidence.ToString("N2"));
+
+                            this.Invoke(new Action(() => lvwPlates.Items.Add(lvwItem)));
+                        }
                     }
                 }
-            }
 
-            imageBox2.Image = image;
+                this.Invoke(new Action(() => imageBox2.Image = image));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return;
+            }
         }
 
-        void CaptureFaceFrame()
+        private void _captureFace_ImageGrabbed(object sender, EventArgs e)
         {
-
-        }
-        void ProcessFaceFrame(object sender, EventArgs arg)
-        {
-            if (_captureFace == null)
+            if (_captureFace == null || !_captureFace.IsOpened)
                 return;
 
-            if (!_captureFace.IsOpened || _capturePause)
+            var queryFrame = new Mat();
+
+            _captureFace.Read(queryFrame);
+
+            try
             {
-                return;
-            }
+                var image = queryFrame.ToImage<Bgr, byte>().Resize(400, 300, Emgu.CV.CvEnum.Inter.Cubic);
+                var imageClone = image.Clone();
 
-            var queryFrame = _captureFace.QueryFrame();
+                this.Invoke(new Action(() => imageBox1.Image = imageClone));
 
-            if (queryFrame == null)
-            {
-                return;
-            }
+                var faces = new List<Rectangle>();
+                var eyes = new List<Rectangle>();
+                long detectionTime;
 
-            var image = queryFrame.ToImage<Bgr, byte>().Resize(400, 300, Emgu.CV.CvEnum.Inter.Cubic);
+                DetectFace.Detect(imageClone, @"haarcascades\haarcascade_frontalface_default.xml", @"haarcascades\haarcascade_eye.xml", faces, eyes, out detectionTime);
 
-            var imageClone = image.Clone();
-            this.imageBox1.Image = imageClone;
-
-            List<Rectangle> faces = new List<Rectangle>();
-            List<Rectangle> eyes = new List<Rectangle>();
-            long detectionTime;
-            DetectFace.Detect(imageClone, @"haarcascades\haarcascade_frontalface_default.xml", @"haarcascades\haarcascade_eye.xml", faces, eyes, out detectionTime);
-
-            //var bitmap = image.ToBitmap();
-            //this.imageBox2.Image = null;
-            //this.pbFace.Image = null;
-
-            this.btnApproveEntry.Enabled = false;
-            foreach (Rectangle face in faces)
-            {
-
-                //For EigenFaces
-                //else if (comboBoxAlgorithm.Text == "EigenFaces")
-                if (eigenFaceRecognizer != null)
+                foreach (var face in faces)
                 {
-                    CvInvoke.cvResetImageROI(imageClone);
-                    //image._EqualizeHist();
-                    //if (eqHisChecked.Checked == true)
-                    {
-                        //image._EqualizeHist();
-                    }
-                    //var result = eigenFaceRecognizer.Predict(imageClone.Convert<Gray, Byte>().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic));
-                    //if (pbFace.Image == null && result.Label != -1)
-                    //{
-                    //    //image.Draw(eigenlabels[result.Label].ToString(), ref font, new Point(face.X - 2, face.Y - 2), new Bgr(Color.LightGreen));
+                    CvInvoke.cvResetImageROI(image);
 
-                    //    //image.Draw(eigenlabels[result.Label].ToString(), new Point(face.X - 2, face.Y - 2), Emgu.CV.CvEnum.FontFace.HersheyTriplex, 1, new Bgr(Color.Green));
-                    //    //label6.Text = result.Distance.ToString();
-
-                    //    pbFace.Image = new Bitmap(eigenlabels[result.Label]);
-
-
-                    //    //  find the registration
-                    //    // face_859a36c3-8a5b-4582-bc66-0bbb59b6f03d_636888658866672057.bmp
-                    //    var filename = Path.GetFileName(eigenlabels[result.Label]);
-                    //    var parts = filename.Split(new[] { '_' });
-                    //    var regId = parts[1];
-
-                    //    //  TODO: ADD LOGIC HERE
-                    //    var db = new AppDbContext();
-
-                    //    //var reg = db.Registrations.FirstOrDefault(p => p.RegistrationId == regId);
-
-                    //    //if (reg != null)
-                    //    //{
-                    //    //    _registration = reg;
-                    //    //    txtFullname.Text = _registration.Fullname;
-
-                    //    //    //  check if already entered
-                    //    //    var currParking = db.Parkings.FirstOrDefault(p => p.DateEnd == null && p.RegistrationId == _registration.RegistrationId);
-
-                    //    //    btnApproveEntry.Enabled = true;
-                    //    //    if (currParking != null)
-                    //    //    {
-                    //    //        btnApproveEntry.Enabled = false;
-                    //    //        //MessageBox.Show("Registration is already parked inside!!!", "Parking", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    //    //        //this.Close();
-                    //    //    }
-                    //    //}
-
-                    //    //btnApproveEntry.Enabled = reg != null;
-                    //}
+                    image.Draw(face, new Bgr(Color.Red), 2);
                 }
 
+                foreach (var eye in eyes)
+                {
+                    CvInvoke.cvResetImageROI(image);
+                    image.Draw(eye, new Bgr(Color.Blue), 2);
+                }
 
+                if (faces.Any() && eyes.Count == 2)
+                {
+                    Invoke(new Action(() => imageBox1.Image = image));
 
-                CvInvoke.cvResetImageROI(image);
-                image.Draw(face, new Bgr(Color.Red), 2);
-
+                    imageClone.ROI = faces.First();
+                    _faceCopy = imageClone.Copy().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+                }
+                
+                this.Invoke(new Action(() => btnCaptureFace.Enabled = _faceCopy != null));
 
             }
-
-            foreach (Rectangle eye in eyes)
+            catch (Exception ex)
             {
-                CvInvoke.cvResetImageROI(image);
-                image.Draw(eye, new Bgr(Color.Blue), 2);
+                Console.WriteLine(ex.ToString());
+                return;
             }
-
-            if (faces.Any() && eyes.Any())
-                this.imageBox1.Image = image;
-
         }
-
-        void ProcessPlateFrame(object sender, EventArgs arg)
-        {
-
-            //if (_capturePlate == null)
-            //    return;
-
-            //if (!_capturePlate.IsOpened || _capturePause)
-            //{
-            //    return;
-            //}
-
-            //var queryFrame = _capturePlate.QueryFrame();
-
-            //if (queryFrame == null)
-            //{
-            //    return;
-            //}
-
-            //var image = queryFrame.ToImage<Bgr, byte>().Resize(400, 300, Emgu.CV.CvEnum.Inter.Cubic);
-
-            //var imageClone = image.Clone();
-            //this.imageBox2.Image = imageClone;
-
-
-            //processTimeLabel.Text = String.Format("License Plate Recognition time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void btnApproveEntry_Click(object sender, EventArgs e)
         {
             foreach (var img in _faceImages)
@@ -468,30 +284,36 @@ namespace parking.system.winform
 
             db.SaveChanges();
 
-            this.Close();
+            MessageBox.Show("Parking Entry Approved", "Enter Parking", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            this.Close();
         }
 
         private void frmEntry_FormClosed(object sender, FormClosedEventArgs e)
         {
+            _captureFace.ImageGrabbed -= _captureFace_ImageGrabbed;
             _captureFace.Pause();
             _captureFace.Stop();
             _captureFace.Dispose();
             _captureFace = null;
+
+            _capturePlate.ImageGrabbed -= _capturePlate_ImageGrabbed;
+            _capturePlate.Pause();
+            _capturePlate.Stop();
+            _capturePlate.Dispose();
+            _capturePlate = null;
+            
+            _faceImages.ForEach(p =>
+            {
+                p.Dispose();
+            });
         }
-
-        private void imageBox2_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void btnCaptureFace_Click(object sender, EventArgs e)
         {
 
             var image = _faceCopy;
-
-            //imgBox1.Image = image;
-
+            
             SetFaceBox(image);
         }
 
@@ -506,27 +328,7 @@ namespace parking.system.winform
                 }
             }
         }
-
-        private void cmbCamera1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-
-            if (cmbCamera1.SelectedIndex != cmbCamera2.SelectedIndex)
-            {
-                if (_captureFace != null)
-                {
-                    _captureFace.Stop();
-                    _captureFace.Dispose();
-                }
-
-                _captureFace = new VideoCapture(cmbCamera1.SelectedIndex);
-            }
-            else
-            {
-
-            }
-        }
-
+        
         private static string NewId()
         {
             return Guid.NewGuid().ToString().ToLower();
@@ -562,6 +364,12 @@ namespace parking.system.winform
 
                 txtPlate.Text = item.Text;
             }
+        }
+        
+        private void imgBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (sender is ImageBox imgBox)
+                imgBox.Image = null;
         }
     }
 }

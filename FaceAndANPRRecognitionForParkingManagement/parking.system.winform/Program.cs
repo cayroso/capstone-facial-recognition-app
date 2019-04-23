@@ -56,7 +56,9 @@ create table if not exists ParkingPlateImage(
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Application.Run(new frmEntry());
+            //Application.Run(new frmSplash());
+
+            //Application.Run(new frmEntryPlate());
             Application.Run(new frmMain());
             //Application.Run(new frmExit());
 

@@ -37,10 +37,6 @@
             this.imgBox2 = new Emgu.CV.UI.ImageBox();
             this.imgBox1 = new Emgu.CV.UI.ImageBox();
             this.imageBox2 = new Emgu.CV.UI.ImageBox();
-            this.cmbCamera2 = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cmbCamera1 = new System.Windows.Forms.ComboBox();
             this.btnApproveExit = new System.Windows.Forms.Button();
             this.btnClearImages = new System.Windows.Forms.Button();
             this.lvwPlates = new System.Windows.Forms.ListView();
@@ -51,7 +47,6 @@
             this.lblPlateNumber = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBox5)).BeginInit();
@@ -78,7 +73,7 @@
             // 
             this.imgBox6.BackColor = System.Drawing.SystemColors.HotTrack;
             this.imgBox6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imgBox6.Location = new System.Drawing.Point(226, 461);
+            this.imgBox6.Location = new System.Drawing.Point(525, 113);
             this.imgBox6.Name = "imgBox6";
             this.imgBox6.Size = new System.Drawing.Size(101, 101);
             this.imgBox6.TabIndex = 27;
@@ -88,7 +83,7 @@
             // 
             this.imgBox5.BackColor = System.Drawing.SystemColors.HotTrack;
             this.imgBox5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imgBox5.Location = new System.Drawing.Point(119, 461);
+            this.imgBox5.Location = new System.Drawing.Point(418, 113);
             this.imgBox5.Name = "imgBox5";
             this.imgBox5.Size = new System.Drawing.Size(101, 101);
             this.imgBox5.TabIndex = 26;
@@ -98,7 +93,7 @@
             // 
             this.imgBox4.BackColor = System.Drawing.SystemColors.HotTrack;
             this.imgBox4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imgBox4.Location = new System.Drawing.Point(15, 461);
+            this.imgBox4.Location = new System.Drawing.Point(739, 6);
             this.imgBox4.Name = "imgBox4";
             this.imgBox4.Size = new System.Drawing.Size(101, 101);
             this.imgBox4.TabIndex = 25;
@@ -108,7 +103,7 @@
             // 
             this.imgBox3.BackColor = System.Drawing.SystemColors.HotTrack;
             this.imgBox3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imgBox3.Location = new System.Drawing.Point(226, 354);
+            this.imgBox3.Location = new System.Drawing.Point(632, 6);
             this.imgBox3.Name = "imgBox3";
             this.imgBox3.Size = new System.Drawing.Size(101, 101);
             this.imgBox3.TabIndex = 24;
@@ -118,7 +113,7 @@
             // 
             this.imgBox2.BackColor = System.Drawing.SystemColors.HotTrack;
             this.imgBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imgBox2.Location = new System.Drawing.Point(119, 354);
+            this.imgBox2.Location = new System.Drawing.Point(525, 6);
             this.imgBox2.Name = "imgBox2";
             this.imgBox2.Size = new System.Drawing.Size(101, 101);
             this.imgBox2.TabIndex = 23;
@@ -128,7 +123,7 @@
             // 
             this.imgBox1.BackColor = System.Drawing.SystemColors.HotTrack;
             this.imgBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imgBox1.Location = new System.Drawing.Point(12, 354);
+            this.imgBox1.Location = new System.Drawing.Point(418, 6);
             this.imgBox1.Name = "imgBox1";
             this.imgBox1.Size = new System.Drawing.Size(101, 101);
             this.imgBox1.TabIndex = 22;
@@ -138,49 +133,15 @@
             // 
             this.imageBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.imageBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.imageBox2.Location = new System.Drawing.Point(422, 6);
+            this.imageBox2.Location = new System.Drawing.Point(12, 327);
             this.imageBox2.Name = "imageBox2";
             this.imageBox2.Size = new System.Drawing.Size(400, 315);
             this.imageBox2.TabIndex = 28;
             this.imageBox2.TabStop = false;
             // 
-            // cmbCamera2
-            // 
-            this.cmbCamera2.FormattingEnabled = true;
-            this.cmbCamera2.Location = new System.Drawing.Point(550, 327);
-            this.cmbCamera2.Name = "cmbCamera2";
-            this.cmbCamera2.Size = new System.Drawing.Size(266, 21);
-            this.cmbCamera2.TabIndex = 32;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(434, 327);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(110, 13);
-            this.label2.TabIndex = 31;
-            this.label2.Text = "Plate Number Camera";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 324);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
-            this.label1.TabIndex = 30;
-            this.label1.Text = "Face Camera";
-            // 
-            // cmbCamera1
-            // 
-            this.cmbCamera1.FormattingEnabled = true;
-            this.cmbCamera1.Location = new System.Drawing.Point(88, 327);
-            this.cmbCamera1.Name = "cmbCamera1";
-            this.cmbCamera1.Size = new System.Drawing.Size(324, 21);
-            this.cmbCamera1.TabIndex = 29;
-            // 
             // btnApproveExit
             // 
-            this.btnApproveExit.Location = new System.Drawing.Point(425, 465);
+            this.btnApproveExit.Location = new System.Drawing.Point(632, 423);
             this.btnApproveExit.Name = "btnApproveExit";
             this.btnApproveExit.Size = new System.Drawing.Size(221, 49);
             this.btnApproveExit.TabIndex = 33;
@@ -190,9 +151,9 @@
             // 
             // btnClearImages
             // 
-            this.btnClearImages.Location = new System.Drawing.Point(333, 354);
+            this.btnClearImages.Location = new System.Drawing.Point(632, 113);
             this.btnClearImages.Name = "btnClearImages";
-            this.btnClearImages.Size = new System.Drawing.Size(79, 209);
+            this.btnClearImages.Size = new System.Drawing.Size(208, 42);
             this.btnClearImages.TabIndex = 34;
             this.btnClearImages.Text = "Clear Images";
             this.btnClearImages.UseVisualStyleBackColor = true;
@@ -204,9 +165,9 @@
             this.columnHeader1,
             this.columnHeader2});
             this.lvwPlates.FullRowSelect = true;
-            this.lvwPlates.Location = new System.Drawing.Point(828, 6);
+            this.lvwPlates.Location = new System.Drawing.Point(418, 327);
             this.lvwPlates.Name = "lvwPlates";
-            this.lvwPlates.Size = new System.Drawing.Size(221, 315);
+            this.lvwPlates.Size = new System.Drawing.Size(208, 312);
             this.lvwPlates.TabIndex = 36;
             this.lvwPlates.UseCompatibleStateImageBehavior = false;
             this.lvwPlates.View = System.Windows.Forms.View.Details;
@@ -225,9 +186,9 @@
             this.groupBox1.Controls.Add(this.lblPlateNumber);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(425, 369);
+            this.groupBox1.Location = new System.Drawing.Point(632, 327);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(397, 90);
+            this.groupBox1.Size = new System.Drawing.Size(221, 90);
             this.groupBox1.TabIndex = 37;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Found Entry";
@@ -269,30 +230,15 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Plate Number:";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(964, 327);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(85, 33);
-            this.button1.TabIndex = 38;
-            this.button1.Text = "Clear";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // frmExit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 575);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(865, 651);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lvwPlates);
             this.Controls.Add(this.btnClearImages);
             this.Controls.Add(this.btnApproveExit);
-            this.Controls.Add(this.cmbCamera2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cmbCamera1);
             this.Controls.Add(this.imageBox2);
             this.Controls.Add(this.imgBox6);
             this.Controls.Add(this.imgBox5);
@@ -302,8 +248,10 @@
             this.Controls.Add(this.imgBox1);
             this.Controls.Add(this.imageBox1);
             this.Name = "frmExit";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Exit Parking";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmExit_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmExit_FormClosing);
+            this.Load += new System.EventHandler(this.frmExit_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgBox5)).EndInit();
@@ -315,7 +263,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -329,10 +276,6 @@
         private Emgu.CV.UI.ImageBox imgBox2;
         private Emgu.CV.UI.ImageBox imgBox1;
         private Emgu.CV.UI.ImageBox imageBox2;
-        private System.Windows.Forms.ComboBox cmbCamera2;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cmbCamera1;
         private System.Windows.Forms.Button btnApproveExit;
         private System.Windows.Forms.Button btnClearImages;
         private System.Windows.Forms.ListView lvwPlates;
@@ -343,6 +286,5 @@
         private System.Windows.Forms.Label lblPlateNumber;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
     }
 }

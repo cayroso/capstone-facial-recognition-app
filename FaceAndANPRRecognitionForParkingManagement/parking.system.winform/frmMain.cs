@@ -34,19 +34,19 @@ namespace parking.system.winform
             lvwParking.LargeImageList = imageList1;
             imageList1.ImageSize = new Size(128, 128);
 
-            Init();
-
             pbImages = new List<PictureBox>
             {
                 pb1, pb2, pb3, pb4, pb5, pb6
             };
+
+            Init();
+
         }
 
         private void lvwParking_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             pbImages.ForEach(p => p.Image = null);
-
-            tsbExit.Enabled = lvwParking.SelectedItems.Count > 0;
+            
             if (lvwParking.SelectedItems.Count > 0)
             {
                 var selected = lvwParking.SelectedItems[0];
@@ -65,27 +65,26 @@ namespace parking.system.winform
                         var img = images[i];
                         var filename = $@"TrainedFaces\{img.Filename}";
                         if (File.Exists(filename))
-                            pbImages[i].Image = new Bitmap(filename);
+                        {
+                            using (var fs = File.Open(filename, FileMode.Open, FileAccess.Read))
+                            using (var bmp = new Bitmap(fs))
+                            {
+                                pbImages[i].Image = new Bitmap(bmp);
+
+                                fs.Close();
+                                fs.Dispose();
+                                bmp.Dispose();
+                            }
+                        }
                     }
-                    //pb1.Image = new Bitmap($@"TrainedFaces\{images[0].Filename}");
-                    //pb2.Image = new Bitmap($@"TrainedFaces\{images[1].Filename}");
-                    //pb3.Image = new Bitmap($@"TrainedFaces\{images[2].Filename}");
-                    //pb4.Image = new Bitmap($@"TrainedFaces\{images[3].Filename}");
-                    //pb5.Image = new Bitmap($@"TrainedFaces\{images[4].Filename}");
-                    //pb6.Image = new Bitmap($@"TrainedFaces\{images[5].Filename}");
-
-                    //tsbExit.Enabled = parking.DateEnd == null;
-
+                    
                     lblStart.Text = parking.DateStart.ToString();
                     lblEnd.Text = parking.DateEnd.ToString();
-
-
+                    
                     var duration = (parking.DateEnd.GetValueOrDefault(DateTime.Now) - parking.DateStart).TotalHours;
 
                     lblTotalHours.Text = $"{duration.ToString("N2")} hr(s)";
-                }
-
-
+                }                
             }
         }
 
@@ -111,10 +110,10 @@ namespace parking.system.winform
         void Init()
         {
             var db = new AppDbContext();
-            var start = DateTime.Now.Date;
-            var end = DateTime.Now.Date.AddDays(1).AddMinutes(-1);
+            //var start = DateTime.Now.Date;
+            //var end = DateTime.Now.Date.AddDays(1).AddMinutes(-1);
 
-            var parking = db.Parkings.Where(p => (p.DateStart >= start && p.DateStart <= end) || p.DateEnd == null)
+            var parking = db.Parkings.Where(p => p.DateEnd == null)
                 .Include(p => p.FaceImages)
                 //.Include("PlateImage")
                 .OrderByDescending(p => p.DateStart)
@@ -123,6 +122,13 @@ namespace parking.system.winform
 
             lvwParking.Items.Clear();
             imageList1.Images.Clear();
+
+            pbImages.ForEach(p =>
+            {
+                if (p.Image != null)
+                    p.Image.Dispose();
+                p.Image = null;
+            });
 
             foreach (var p in parking)
             {
@@ -133,18 +139,20 @@ namespace parking.system.winform
 
                     if (!imageList1.Images.ContainsKey(filename) && File.Exists(filename))
                     {
-                        imageList1.Images.Add(filename, new Bitmap(new Bitmap($@"TrainedFaces\{img.Filename}")));
+                        //var filePath = $@"TrainedFaces\{img.Filename}";
+                        using (var fs = File.Open(filename, FileMode.Open, FileAccess.Read))
+                        using (var bmp = new Bitmap(fs))
+                        {
+                            imageList1.Images.Add(filename, bmp);
+
+                            fs.Close();
+                            fs.Dispose();
+                            bmp.Dispose();                                                        
+                        }
+
                         break;
                     }
                 }
-
-                //if (!imageList1.Images.ContainsKey(fname))
-                //{
-                //    var fileName = $@"TrainedFaces\{images[3].Filename}";
-                //    imageList1.Images.Add(fname, new Bitmap(new Bitmap($@"TrainedFaces\{images[3].Filename}"), new Size(64, 64)));
-
-                //    //li.ImageKey = fname;
-                //}
 
                 var li = new ListViewItem(p.PlateNumber);
                 li.Tag = p;
@@ -172,17 +180,13 @@ namespace parking.system.winform
             lvwParking.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             lvwParking.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
-
-
-
-
         }
 
         private void tsbEntry_Click(object sender, EventArgs e)
         {
             var frm = new frmEntry();
-
             frm.ShowDialog();
+            frm.Dispose();
 
             Init();
         }
@@ -190,45 +194,45 @@ namespace parking.system.winform
         private void tsbExit_Click(object sender, EventArgs e)
         {
             var frm = new frmExit();
-
             frm.ShowDialog();
+            frm.Dispose();
 
             Init();
-
-            //if (lvwParking.SelectedItems.Count > 0)
-            //{
-            //    var parking = lvwParking.SelectedItems[0].Tag as Parking;
-
-            //    if (parking != null)
-            //    {
-            //        var frm = new frmExit(parking.ParkingId);
-
-            //        frm.ShowDialog();
-
-            //        Init();
-            //        //var db = new AppDbContext();
-
-            //        //var data = db.Parkings.First(p => p.ParkingId == parking.ParkingId);
-
-            //        //if (data.DateEnd != null)
-            //        //{
-            //        //    MessageBox.Show("Registration already Exited the parking", "Exit Parking", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //        //    return;
-            //        //}
-            //        //data.DateEnd = DateTime.Now;
-
-            //        //db.SaveChangesAsync();
-
-            //        //MessageBox.Show("Exit parking successfull", "Exit Parking", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            //        //Init();
-            //    }
-            //}
         }
 
         private void tsbRefresh_Click(object sender, EventArgs e)
         {
             Init();
+        }
+
+        private void lvwParking_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            Init();
+        }
+
+        private void btnParkingEntry_Click(object sender, EventArgs e)
+        {
+            var frm = new frmEntry();
+
+            frm.ShowDialog();
+
+            Init();
+
+        }
+
+        private void btnParkingExit_Click(object sender, EventArgs e)
+        {
+            var frm = new frmExit();
+
+            frm.ShowDialog();
+
+            Init();
+
         }
     }
 }

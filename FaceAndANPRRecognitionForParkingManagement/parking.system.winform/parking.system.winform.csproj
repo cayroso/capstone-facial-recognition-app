@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.110.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net46\System.Data.SQLite.dll</HintPath>
@@ -92,6 +93,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmEntryFace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEntryFace.Designer.cs">
+      <DependentUpon>frmEntryFace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmEntryPlate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEntryPlate.Designer.cs">
+      <DependentUpon>frmEntryPlate.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +123,12 @@
     <Compile Include="frmEntry.Designer.cs">
       <DependentUpon>frmEntry.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSplash.Designer.cs">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -118,11 +137,20 @@
     <EmbeddedResource Include="frmEntry.resx">
       <DependentUpon>frmEntry.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmEntryFace.resx">
+      <DependentUpon>frmEntryFace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEntryPlate.resx">
+      <DependentUpon>frmEntryPlate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmExit.resx">
       <DependentUpon>frmExit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSplash.resx">
+      <DependentUpon>frmSplash.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
